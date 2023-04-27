@@ -19,7 +19,8 @@ from lookuptool import CsvLookupTool
 class ReadRetrieveReadApproach(Approach):
 
     template_prefix = \
-"You are an intelligent assistant helping Contoso Inc employees with their healthcare plan questions and employee handbook questions. " \
+"You must answer by Vietnamese." \
+"You are an intelligent assistant helping user to find out which credit service is form your need through banking in Vietnam. " \
 "Answer the question using only the data provided in the information sources below. " \
 "For tabular information return it as an html table. Do not return markdown format. " \
 "Each source has a name followed by colon and the actual data, quote the source name for each piece of data you use in the response. " \
@@ -27,7 +28,7 @@ class ReadRetrieveReadApproach(Approach):
 "It's important to strictly follow the format where the name of the source is in square brackets at the end of the sentence, and only up to the prefix before the colon (\":\"). " \
 "If there are multiple sources, cite each one in their own square brackets. For example, use \"[info343][ref-76]\" and not \"[info343,ref-76]\". " \
 "Never quote tool names as sources." \
-"If you cannot answer using the sources below, say that you don't know. " \
+"If you CANNOT answer using the sources below, say that you don't know. " \
 "\n\nYou can access to the following tools:"
     
     template_suffix = """
@@ -37,7 +38,7 @@ Question: {input}
 
 Thought: {agent_scratchpad}"""    
 
-    CognitiveSearchToolDescription = "useful for searching the Microsoft employee benefits information such as healthcare plans, retirement plans, etc."
+    CognitiveSearchToolDescription = "useful for searching the credit service through banking data in Vietnam"
 
     def __init__(self, search_client: SearchClient, openai_deployment: str, sourcepage_field: str, content_field: str):
         self.search_client = search_client
@@ -78,8 +79,8 @@ Thought: {agent_scratchpad}"""
         cb_manager = CallbackManager(handlers=[cb_handler])
         
         acs_tool = Tool(name = "CognitiveSearch", func = lambda q: self.retrieve(q, overrides), description = self.CognitiveSearchToolDescription)
-        employee_tool = EmployeeInfoTool("Employee1")
-        tools = [acs_tool, employee_tool]
+        banking_tool = BankingInfoTool("Banking1")
+        tools = [acs_tool, banking_tool]
 
         prompt = ZeroShotAgent.create_prompt(
             tools=tools,
@@ -96,17 +97,17 @@ Thought: {agent_scratchpad}"""
         result = agent_exec.run(q)
                 
         # Remove references to tool names that might be confused with a citation
-        result = result.replace("[CognitiveSearch]", "").replace("[Employee]", "")
+        result = result.replace("[CognitiveSearch]", "").replace("[Banking]", "")
 
         return {"data_points": self.results or [], "answer": result, "thoughts": cb_handler.get_and_reset_log()}
 
-class EmployeeInfoTool(CsvLookupTool):
-    employee_name: str = ""
+class BankingInfoTool(CsvLookupTool):
+    banking_name: str = ""
 
-    def __init__(self, employee_name: str):
-        super().__init__(filename = "data/employeeinfo.csv", key_field = "name", name = "Employee", description = "useful for answering questions about the employee, their benefits and other personal information")
-        self.func = self.employee_info
-        self.employee_name = employee_name
+    def __init__(self, banking_name: str):
+        super().__init__(filename = "data/bankinginfo.csv", key_field = "name", name = "Banking", description = "useful for answering questions about the banking, its credit service in Vietnam")
+        self.func = self.banking_info
+        self.banking_name = banking_name
 
-    def employee_info(self, unused: str) -> str:
-        return self.lookup(self.employee_name)
+    def banking_info(self, unused: str) -> str:
+        return self.lookup(self.banking_name)

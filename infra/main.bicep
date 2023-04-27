@@ -10,7 +10,7 @@ param environmentName string
 param location string
 
 param appServicePlanName string = ''
-param backendServiceName string = ''
+param backendServiceName string = 'ms-gpt-demo'
 param resourceGroupName string = ''
 
 param searchServiceName string = ''
@@ -47,6 +47,7 @@ param principalId string = ''
 
 var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
+
 var tags = { 'azd-env-name': environmentName }
 
 // Organize resources in a resource group
