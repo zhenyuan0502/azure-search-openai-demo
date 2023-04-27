@@ -9,8 +9,8 @@ export type ExampleModel = {
 
 const EXAMPLES: ExampleModel[] = [
     {
-        text: "Hệ thống đang có dữ liệu của ngân hàng nào?",
-        value: "Hệ thống đang có dữ liệu của ngân hàng nào?"
+        text: "Bạn có thể cung cấp thông tin thẻ tín dụng ngân hàng nào?",
+        value: "Bạn có thể cung cấp thông tin thẻ tín dụng ngân hàng nào?"
     },
     { text: "Techcombank có các loại thẻ tín dụng nào?", value: "Techcombank có các loại thẻ tín dụng nào?" },
     { text: "Ngân hàng nào đang có lãi suất cao nhất?", value: "Ngân hàng nào đang có lãi suất cao nhất?" }

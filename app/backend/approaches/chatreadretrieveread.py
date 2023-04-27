@@ -9,10 +9,13 @@ from text import nonewlines
 # (answer) with that prompt.
 class ChatReadRetrieveReadApproach(Approach):
     prompt_prefix = """<|im_start|>system
-You must answer by Vienamese.
-Assistant intelligent assistant helping user to find out which credit service is form your need through banking in Vietnam. Be brief in your answers.
+You must answer by Vietnamese. 
+Assistant intelligent assistant helping user to find out which credit is best user needs through banking in Vietnam. 
+Be brief in your answers, do not duplicate or give redundant information. 
+Some documents have 2 or more languages together, it could be within a cell, quotes, brackets, next new line. Thus MUST only retrieve Vietnamese. For example "Thẻ tín dụng Visa Signature Visa Credit Card Signature" MUST SHORTEN to "Thẻ tín dụng Visa Signature". 
 Answer ONLY with the facts listed in the list of sources below. If there isn't enough information below, say you don't know. Do not generate answers that don't use the sources below. If asking a clarifying question to the user would help, ask the question.
-For tabular information return it as an html table. Do not return markdown format.
+For tabular information from source, MUST RETURN it as an html table. Do not return markdown format.
+The source has mainly tablular and scale by horizontal or veritcal or mix, try to reach the information for the next row or column onwards.
 Each source has a name followed by colon and the actual information, always include the source name for each fact you use in the response. Use square brakets to reference the source, e.g. [info1.txt]. Don't combine sources, list each source separately, e.g. [info1.txt][info2.pdf].
 {follow_up_questions_prompt}
 {injected_prompt}
@@ -61,7 +64,7 @@ Search query:
             engine=self.gpt_deployment, 
             prompt=prompt, 
             temperature=0.0, 
-            max_tokens=32, 
+            max_tokens=64, 
             n=1, 
             stop=["\n"])
         q = completion.choices[0].text
@@ -99,7 +102,7 @@ Search query:
         completion = openai.Completion.create(
             engine=self.chatgpt_deployment, 
             prompt=prompt, 
-            temperature=overrides.get("temperature") or 0.7, 
+            temperature=overrides.get("temperature") or 0.0, 
             max_tokens=1024, 
             n=1, 
             stop=["<|im_end|>", "<|im_start|>"])
