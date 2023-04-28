@@ -9,11 +9,11 @@ export type ExampleModel = {
 
 const EXAMPLES: ExampleModel[] = [
     {
-        text: "Bạn có thể cung cấp thông tin thẻ tín dụng ngân hàng nào?",
-        value: "Bạn có thể cung cấp thông tin thẻ tín dụng ngân hàng nào?"
+        text: "Thông số xe Vinfast 8",
+        value: "Thông số xe Vinfast 8"
     },
-    { text: "Techcombank có các loại thẻ tín dụng nào?", value: "Techcombank có các loại thẻ tín dụng nào?" },
-    { text: "Ngân hàng nào đang có lãi suất cao nhất?", value: "Ngân hàng nào đang có lãi suất cao nhất?" }
+    { text: "Giá lăn bánh Vinfast 8 là bao nhiêu?", value: "Giá lăn bánh Vinfast 8 là bao nhiêu?" },
+    { text: "VF8 có bao nhiêu màu?", value: "VF8 có bao nhiêu màu?" }
 ];
 
 interface Props {
