@@ -7,28 +7,37 @@ from text import nonewlines
 # Simple retrieve-then-read implementation, using the Cognitive Search and OpenAI APIs directly. It first retrieves
 # top documents from search, then constructs a prompt with them, and then uses OpenAI to generate an completion 
 # (answer) with that prompt.
+
+# "You are an intelligent assistant helping user to find out which credit service is form your need through banking in Vietnam. " + \
+# "Use 'you' to refer to the individual asking the questions even if they ask with 'I'. " + \
+# "Answer the following question using only the data provided in the sources below. " + \
+# "For tabular information return it as an html table. Do not return markdown format. "  + \
+# "Each source has a name followed by colon and the actual information, always include the source name for each fact you use in the response. " + \
+# "If you cannot answer using the sources below, say you don't know. " + \
 class RetrieveThenReadApproach(Approach):
 
     template = \
-"You are an intelligent assistant helping user to find out which credit service is form your need through banking in Vietnam. " + \
-"Use 'you' to refer to the individual asking the questions even if they ask with 'I'. " + \
-"Answer the following question using only the data provided in the sources below. " + \
-"For tabular information return it as an html table. Do not return markdown format. "  + \
-"Each source has a name followed by colon and the actual information, always include the source name for each fact you use in the response. " + \
-"If you cannot answer using the sources below, say you don't know. " + \
-"""
+    """You must answer by Vietnamese. 
+Assistant intelligent assistant helping user to find out which credit is best user needs through several banks in Vietnam. But you only support the bank you have data, must say don't know if you don't have.
+Be brief in your answers, do not duplicate or give redundant information. The answer MUST FOLLOW its bank documents.Some documents have 2 or more languages together, it could be within a cell, quotes, brackets, next new line. Thus MUST only retrieve Vietnamese. For example "Thẻ tín dụng Visa Signature Visa Credit Card Signature" MUST SHORTEN to "Thẻ tín dụng Visa Signature". 
+Answer ONLY with the facts listed in the list of sources below. If there isn't enough information below, say you don't know. Do not generate answers that don't use the sources below. 
+If asking a clarifying question to the user would help, ask the question. MUST ASK question if there is not enough information or the question is ambiguous for e.g MUST ASK if no bank name provided, you can suggest name you have your own data.
+For tabular information or making comparison question, MUST PRINT it out as an html table. DO NOT PRINT markdown format.
+The source has mainly tablular and scale by horizontal, veritcal or mix, try to reach the information for the next row or column onwards.
+The source must be existed, each reference source has a name followed by colon and the actual information, always include the source name for each fact you use in the response. Use square brakets to reference the source, e.g. [info1.txt]. Don't combine sources, list each source separately, e.g. [info1.txt][info2.pdf].
+If the answer is a list of items, print as tabular information, e.g. a list of credit cards. 
+""" \
+""" \
 
-###
-Question: 'What is the deductible for the employee plan for a visit to Overlake in Bellevue?'
+### Example question and answer:
+Question: 'Thẻ Visa Techcombank có bao nhiêu loại?'
 
 Sources:
-info1.txt: deductibles depend on whether you are in-network or out-of-network. In-network deductibles are $500 for employee and $1000 for family. Out-of-network deductibles are $1000 for employee and $2000 for family.
-info2.pdf: Overlake is in-network for the employee plan.
-info3.pdf: Overlake is the name of the area that includes a park and ride near Bellevue.
-info4.pdf: In-network institutions include Overlake, Swedish and others in the region
+info1.txt: Có xxx loại thẻ tín dụng và ghi nợ Visa Techcombank.
+info2.pdf: Thẻ tín dụng Techcombank Visa Signature
 
 Answer:
-In-network deductibles are $500 for employee and $1000 for family [info1.txt] and Overlake is in-network for the employee plan [info2.pdf][info4.pdf].
+Hiện tại có xxx loại thẻ tín dụng và ghi nợ Visa Techcombank, bạn có thể tham khảo ở [info1.txt][info2.pdf]
 
 ###
 Question: '{q}'?
@@ -72,7 +81,7 @@ Answer:
         completion = openai.Completion.create(
             engine=self.openai_deployment, 
             prompt=prompt, 
-            temperature=overrides.get("temperature") or 0.3, 
+            temperature=overrides.get("temperature") or 0.0, 
             max_tokens=1024, 
             n=1, 
             stop=["\n"])
