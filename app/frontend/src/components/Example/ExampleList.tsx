@@ -12,8 +12,8 @@ const EXAMPLES: ExampleModel[] = [
         text: "Thông số xe Vinfast 8",
         value: "Thông số xe Vinfast 8"
     },
-    { text: "Giá lăn bánh Vinfast 8 là bao nhiêu?", value: "Giá lăn bánh Vinfast 8 là bao nhiêu?" },
-    { text: "VF8 có bao nhiêu màu?", value: "VF8 có bao nhiêu màu?" }
+    { text: "Giá lăn bánh Vinfast VF8 là bao nhiêu?", value: "Giá lăn bánh Vinfast VF8 là bao nhiêu?" },
+    { text: "Vinfast 8 có bao nhiêu màu?", value: "Vinfast VF8 có bao nhiêu màu?" }
 ];
 
 interface Props {
