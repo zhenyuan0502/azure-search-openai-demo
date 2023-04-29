@@ -12,6 +12,9 @@ class ChatReadRetrieveReadApproach(Approach):
 Must answer by VIETNAMESE (Tiếng Việt), no matter what the language of the question is, all needed to Vietnamese. 
 Don't justify your answers. Don't give information not mentioned in the CONTEXT INFORMATION. 
 Each source has a name followed by colon and the actual information, always include the source name for each fact you use in the response. Use square brakets to reference the source, e.g. [info1.txt]. Don't combine sources, list each source separately, e.g. [info1.txt][info2.pdf].
+Only generate answers from source, if the answer is not in the source, then say it is out of your scope.
+The response should not reference from multiple source to inferer the answer, only use one source to answer the question.
+Pricing inferer from the source is not allowed.
 
 Follow up questions:
 {follow_up_questions_prompt}
