@@ -10,7 +10,7 @@ param environmentName string
 param location string
 
 param appServicePlanName string = ''
-param backendServiceName string = 'ms-gpt-demo'
+param backendServiceName string
 param resourceGroupName string = ''
 
 param searchServiceName string = ''
